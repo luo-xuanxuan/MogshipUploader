@@ -1,0 +1,13 @@
+{
+    "Author": "Luo Xuanxuan",
+    "Name": "Mogship Uploader",
+    "Punchline": "Uploads Voyage Log Data to Mogship.",
+    "Description": "Uploads Voyage Log Data to Mogship.",
+    "InternalName": "MogshipUploader",
+    "ApplicableVersion": "any",
+    "Tags": [
+        "submersible",
+        "airship",
+        "plugin"
+    ]
+}
