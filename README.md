@@ -1,47 +1,29 @@
-# SamplePlugin
+# Mogship Uploader
 
-Simple example plugin for Dalamud.
+This tool uploads voyage log data from submersibles to [Mogship](https://www.mogship.com/).
 
-This is not designed to be the simplest possible example, but it is also not designed to cover everything you might want to do. For more detailed questions, come ask in [the Discord](https://discord.gg/3NMcUV5).
+This data is anonymous, and contributes to our understanding of what various sectors hold.
 
 ## Main Points
 
-* Simple functional plugin
-  * Slash command
-  * Main UI
-  * Settings UI
-  * Image loading
-  * Plugin json
-* Simple, slightly-improved plugin configuration handling
-* Project organization
-  * Copies all necessary plugin files to the output directory
-    * Does not copy dependencies that are provided by dalamud
-    * Output directory can be zipped directly and have exactly what is required
-  * Hides data files from visual studio to reduce clutter
-    * Also allows having data files in different paths than VS would usually allow if done in the IDE directly
-
-
-The intention is less that any of this is used directly in other projects, and more to show how similar things can be done.
+* Uploads Voyage Log data automatically to learn the following
+  * Loot drop rates
+  * Loot quantities
+  * Double dip rates
+  * Submersible part damage
+  * And more soon!
 
 ## To Use
-### Building
+### Adding Custom Repository to Dalamud
 
-1. Open up `SamplePlugin.sln` in your C# editor of choice (likely [Visual Studio 2022](https://visualstudio.microsoft.com) or [JetBrains Rider](https://www.jetbrains.com/rider/)).
-2. Build the solution. By default, this will build a `Debug` build, but you can switch to `Release` in your IDE.
-3. The resulting plugin can be found at `SamplePlugin/bin/x64/Debug/SamplePlugin.dll` (or `Release` if appropriate.)
+1. Access Dalamud's settings by typing `/xlsettings` in the chat window and pressing enter.
+2. Click on the "Experimental" tab.
+3. Copy and Paste in the following URL into one of the blank inputs under the "Custom Plugin Repositories" section: https://github.com/luo-xuanxuan/MogshipUploader/blob/master/MogshipUploader/MogshipUploader.json
+4. Click the "+" button to add it to the list.
+5. Check the "Enabled" box for your new entry.
+6. Click "Save and Close" at the bottom.
 
 ### Activating in-game
 
-1. Launch the game and use `/xlsettings` in chat or `xlsettings` in the Dalamud Console to open up the Dalamud settings.
-    * In here, go to `Experimental`, and add the full path to the `SamplePlugin.dll` to the list of Dev Plugin Locations.
-2. Next, use `/xlplugins` (chat) or `xlplugins` (console) to open up the Plugin Installer.
-    * In here, go to `Dev Tools > Installed Dev Plugins`, and the `SamplePlugin` should be visible. Enable it.
-3. You should now be able to use `/pmycommand` (chat) or `pmycommand` (console)!
-
-Note that you only need to add it to the Dev Plugin Locations once (Step 1); it is preserved afterwards. You can disable, enable, or load your plugin on startup through the Plugin Installer.
-
-### Reconfiguring for your own uses
-
-Basically, just replace all references to `SamplePlugin` in all of the files and filenames with your desired name. You'll figure it out 😁
-
-Dalamud will load the JSON file (by default, `SamplePlugin/SamplePlugin.json`) next to your DLL and use it for metadata, including the description for your plugin in the Plugin Installer. Make sure to update this with information relevant to _your_ plugin!
+1. Type `/xlplugins` in the chat and hit enter to open your plugins list.
+2. Search Mogship Uploader and click install.
