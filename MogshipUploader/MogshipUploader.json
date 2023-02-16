@@ -4,10 +4,16 @@
     "Punchline": "Uploads Voyage Log Data to Mogship.",
     "Description": "Uploads Voyage Log Data to Mogship.",
     "InternalName": "MogshipUploader",
+	"AssemblyVersion": "0.1-beta",
     "ApplicableVersion": "any",
     "Tags": [
         "submersible",
         "airship",
-        "plugin"
-    ]
+		"voyages",
+		"mogship"
+    ],
+	"DalamudApiLevel": 8,
+	"IconUrl": "",
+    "IsHide": "False",
+    "IsTestingExclusive": "False"
 }
