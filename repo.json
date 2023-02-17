@@ -14,12 +14,10 @@
 			"mogship"
 		],
 		"DalamudApiLevel": 8,
-		"IconUrl": "",
 		"IsHide": "False",
 		"IsTestingExclusive": "False",
-		"DownloadLinkInstall": "https://github.com/luo-xuanxuan/MogshipUploader/releases/download/0.1-Alpha/0.1-alpha.zip",
-		"DownloadLinkTesting": "https://github.com/luo-xuanxuan/MogshipUploader/releases/download/0.1-Alpha/0.1-alpha.zip",
-		"DownloadLinkUpdate": "https://github.com/luo-xuanxuan/MogshipUploader/releases/download/0.1-Alpha/0.1-alpha.zip",
+		"DownloadLinkInstall": "https://github.com/luo-xuanxuan/MogshipUploader/raw/master/0.1-alpha.zip",
+		"DownloadLinkUpdate": "https://github.com/luo-xuanxuan/MogshipUploader/raw/master/0.1-alpha.zip",
 		"IconUrl": "https://github.com/luo-xuanxuan/MogshipUploader/raw/master/icon.png"
 	}
 ]
