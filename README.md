@@ -18,7 +18,7 @@ This data is anonymous, and contributes to our understanding of what various sec
 
 1. Access Dalamud's settings by typing `/xlsettings` in the chat window and pressing enter.
 2. Click on the "Experimental" tab.
-3. Copy and Paste in the following URL into one of the blank inputs under the "Custom Plugin Repositories" section: https://github.com/luo-xuanxuan/MogshipUploader/raw/master/MogshipUploader/repo.json
+3. Copy and Paste in the following URL into one of the blank inputs under the "Custom Plugin Repositories" section: https://raw.githubusercontent.com/luo-xuanxuan/MogshipUploader/master/repo.json
 4. Click the "+" button to add it to the list.
 5. Check the "Enabled" box for your new entry.
 6. Click "Save and Close" at the bottom.
