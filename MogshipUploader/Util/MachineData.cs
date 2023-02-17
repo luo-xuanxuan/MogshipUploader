@@ -10,56 +10,62 @@ namespace MogshipUploader.Util
     public unsafe partial struct HousingWorkshopTerritory
     {
         [FixedSizeArray<AirshipData>(4)]
-        [FieldOffset(0x60)] public fixed byte AirshipDataList[0x1C8 * 4];
+        [FieldOffset(0x68)] public fixed byte AirshipDataList[0x1C0 * 4];
 
         [FieldOffset(0x7D8)] public byte ActiveAirshipId; // 0-3, 255 if none
         [FieldOffset(0x7D9)] public byte AirshipCount;
-        [FieldOffset(0x7DA)] public byte AirshipMax;
+
+        [FieldOffset(0x2950)] public fixed byte AishipUnlockedSectorFlags[0x4];
+        [FieldOffset(0x2954)] public fixed byte AishipExploredSectorFlags[0x4];
 
         [FixedSizeArray<SubmersibleData>(4)]
         [FieldOffset(0x2960)] public fixed byte SubmersibleDataList[0x2320 * 4];
 
         [FixedSizeArray<Pointer<SubmersibleData>>(5)]
         [FieldOffset(0xB5E0)] public fixed byte SubmersibleDataPointerList[0x8 * 5]; // 0-3 is the same as SubmersibleDataList, 4 is the one you are currently using
-
+        [FieldOffset(0xB6F9)] public fixed byte SubmersibleUnlockedSectorFlags[0xB];
+        [FieldOffset(0xB708)] public fixed byte SubmersibleExploredSectorFlags[0xB];
         public Span<SubmersibleData> SubmersibleList => new(Unsafe.AsPointer(ref SubmersibleDataList[0]), 4);
     }
 
-    [StructLayout(LayoutKind.Explicit, Size = 0x1C8)]
+    [StructLayout(LayoutKind.Explicit, Size = 0x1C0)]
     public unsafe partial struct AirshipData
     {
-        [FieldOffset(0xC)] public int RegisterTime;
-        [FieldOffset(0x14)] public byte RankId;
-        [FieldOffset(0x18)] public int ReturnTime;
-        [FieldOffset(0x1C)] public uint CurrentExp;
-        [FieldOffset(0x20)] public uint NextLevelExp;
+        [FieldOffset(0x4)] public uint RegisterTime;
+        [FieldOffset(0xC)] public byte RankId;
+        [FieldOffset(0x10)] public uint ReturnTime;
+        [FieldOffset(0x14)] public uint CurrentExp;
+        [FieldOffset(0x18)] public uint NextLevelExp;
+        [FieldOffset(0x1C)] public uint MaxCapacity;
 
-        [FieldOffset(0x28)] public ushort HullId;
-        [FieldOffset(0x30)] public ushort SternId;
-        [FieldOffset(0x32)] public ushort BowId;
-        [FieldOffset(0x34)] public ushort BridgeId;
+        [FieldOffset(0x20)] public ushort HullId;
+        [FieldOffset(0x22)] public ushort RiggingId;
+        [FieldOffset(0x24)] public ushort ForecastleId;
+        [FieldOffset(0x26)] public ushort AftcastleId;
 
-        [FieldOffset(0x36)] public ushort Surveillance;
-        [FieldOffset(0x38)] public ushort Retrieval;
-        [FieldOffset(0x40)] public ushort Speed;
-        [FieldOffset(0x42)] public ushort Range;
-        [FieldOffset(0x44)] public ushort Favor;
+        [FieldOffset(0x2E)] public ushort Surveillance;
+        [FieldOffset(0x30)] public ushort Retrieval;
+        [FieldOffset(0x38)] public ushort Speed;
+        [FieldOffset(0x3A)] public ushort Range;
+        [FieldOffset(0x3C)] public ushort Favor;
 
-        [FieldOffset(0x42)] public fixed byte Route[5];
+        [FieldOffset(0x3A)] public fixed byte Route[5];
 
-        [FieldOffset(0x3F)] public fixed byte Name[20];
+        [FieldOffset(0x37)] public fixed byte Name[20];
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 0x2320)]
     public unsafe partial struct SubmersibleData
     {
         [FieldOffset(0x0)] public SubmersibleData* Self;
-        [FieldOffset(0x0E)] public byte RankId;
-        [FieldOffset(0x10)] public int RegisterTime;
-        [FieldOffset(0x14)] public int ReturnTime;
+        [FieldOffset(0xC)] public ushort Status; // 0:Unregistered 1:Idle 2:Exploring
+        [FieldOffset(0xE)] public byte RankId;
+        [FieldOffset(0x10)] public uint RegisterTime;
+        [FieldOffset(0x14)] public uint ReturnTime;
         [FieldOffset(0x18)] public uint Experience;
         [FieldOffset(0x1C)] public uint ExperienceToNextRank;
 
+        [FieldOffset(0x20)] public byte MaxCapacity;
         [FieldOffset(0x22)] public fixed byte Name[20];
 
         [FieldOffset(0x3A)] public ushort HullId;

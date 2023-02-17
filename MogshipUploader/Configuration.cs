@@ -11,6 +11,8 @@ namespace MogshipUploader
 
         public bool SomePropertyToBeSavedAndWithADefault { get; set; } = true;
 
+        public string DataTarget = string.Empty;
+
         // the below exist just to make saving less cumbersome
         [NonSerialized]
         private DalamudPluginInterface? PluginInterface;

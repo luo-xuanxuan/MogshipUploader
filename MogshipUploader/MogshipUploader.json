@@ -4,7 +4,7 @@
     "Punchline": "Uploads Voyage Log Data to Mogship.",
     "Description": "Uploads Voyage Log Data to Mogship.",
     "InternalName": "MogshipUploader",
-	"AssemblyVersion": "0.1-beta",
+	"AssemblyVersion": "0.1-alpha",
     "ApplicableVersion": "any",
     "Tags": [
         "submersible",

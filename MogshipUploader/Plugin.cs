@@ -13,20 +13,21 @@ using Dalamud.Game.ClientState;
 using System.Net.Http;
 using System.Threading;
 using FFXIVClientStructs.FFXIV.Client.Game;
+using System.Diagnostics;
+using Dalamud.Utility.Signatures;
+using System.IO;
 
 namespace MogshipUploader
 {
 
     public sealed class Plugin : IDalamudPlugin
     {
-        public int[] ReturnTime = new int[4] { 0, 0, 0, 0 };
+        public uint[] ReturnTime = new uint[4] { 0, 0, 0, 0 };
+        public ushort[] StatusWatch = new ushort[4] { 0, 0, 0, 0 };
         public SubmarineData[] Submarines = new SubmarineData[4];
         public ShipCondition[] ShipConditions = new ShipCondition[4];
 
         public string debug = "";
-
-        public int timerStart = 0;
-        public int timerLength = 3600; //1hr
 
         public string Name => "Mogship Uploader";
         private const string CommandName = "/mogship";
@@ -37,6 +38,9 @@ namespace MogshipUploader
         public ClientState ClientState { get; init; }
         public Configuration Configuration { get; init; }
         public WindowSystem WindowSystem = new("MogshipUploader");
+
+        [Signature("48 89 01 48 8B D9 33 C0 48 89 71 18", ScanType = ScanType.StaticAddress)]
+        private nint MemoryPointer;
 
         public Plugin(
             [RequiredVersion("1.0")] DalamudPluginInterface pluginInterface,
@@ -49,6 +53,7 @@ namespace MogshipUploader
             this.CommandManager = commandManager;
             this.Framework = framework;
             this.ClientState = clientState;
+
             /*
             this.Configuration = this.PluginInterface.GetPluginConfig() as Configuration ?? new Configuration();
             this.Configuration.Initialize(this.PluginInterface);
@@ -60,11 +65,15 @@ namespace MogshipUploader
             this.CommandManager.AddHandler(CommandName, new CommandInfo(OnCommand)
             {
                 HelpMessage = "Opens main Mogship Window"
-            });
+            });*/
 
             this.PluginInterface.UiBuilder.Draw += DrawUI;
-            this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;*/
+            this.PluginInterface.UiBuilder.OpenConfigUi += DrawConfigUI;
             this.Framework.Update += OnFrameworkUpdate;
+
+            
+
+            SignatureHelper.Initialise(this);
 
             Submarines[0] = new SubmarineData();
             Submarines[1] = new SubmarineData();
@@ -80,7 +89,7 @@ namespace MogshipUploader
         public void Dispose()
         {
             this.WindowSystem.RemoveAllWindows();
-            this.CommandManager.RemoveHandler(CommandName);
+            //this.CommandManager.RemoveHandler(CommandName);
             this.Framework.Update -= OnFrameworkUpdate;
         }
 
@@ -97,16 +106,17 @@ namespace MogshipUploader
 
         public void DrawConfigUI()
         {
-            WindowSystem.GetWindow("A Wonderful Configuration Window").IsOpen = true;
+            WindowSystem.GetWindow("Mogship Uploader Config").IsOpen = true;
         }
 
         public unsafe void sendData(string json)
         {
-            PluginLog.Log(json);
+            //PluginLog.Log(json);
             var client = new HttpClient();
-            var url = "http://127.0.0.1:8000/";
+            var url = "https://db.mogship.com/";
             var cts = new CancellationTokenSource();
             cts.CancelAfter(60000); //60s
+
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
 
@@ -120,26 +130,24 @@ namespace MogshipUploader
 
             //debug = "";
 
+            //PluginLog.Log(this.MemoryPointer:X8);
+            //PluginLog.Log($"Housing Manager: {(nint)HousingManager.Instance():X}");
+
             var workshopTerritory = (HousingWorkshopTerritory*)HousingManager.Instance()->WorkshopTerritory;
             if (workshopTerritory == null)
             {
-                timerStart = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
                 //fixes character swapping holding previous ship conditions
                 for (int i = 0; i < 4; i++)
+                {
                     ShipConditions[i] = new ShipCondition();
+                    ReturnTime[i] = 0;
+                }
                 return;
             }
 
             var inventoryManager = InventoryManager.Instance();
             var subContainer = inventoryManager->GetInventoryContainer(InventoryType.HousingInteriorPlacedItems2);
             if (subContainer == null) return;
-
-            if (DateTimeOffset.UtcNow.ToUnixTimeSeconds() >= timerStart + timerLength)
-            {
-                for (int i = 0; i < 4; i++)
-                    ShipConditions[i] = new ShipCondition(subContainer, i);
-                timerStart = (int)DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-            }
 
             for (int i = 0; i < 4; i++)
             {
@@ -160,10 +168,13 @@ namespace MogshipUploader
                         ShipConditions[i] = newCondition;
                     }
                 }
-                ReturnTime[i] = workshopTerritory->SubmersibleList[i].ReturnTime;
-                if (ShipConditions[i] == new ShipCondition())
+
+                if(StatusWatch[i] != 2 && workshopTerritory->SubmersibleList[i].Status == 2)
                     ShipConditions[i] = new ShipCondition(subContainer, i);
-                //debug += "\n" + ShipConditions[i].getJSON();
+
+                StatusWatch[i] = workshopTerritory->SubmersibleList[i].Status;
+
+                ReturnTime[i] = workshopTerritory->SubmersibleList[i].ReturnTime;
             }
         }
     }

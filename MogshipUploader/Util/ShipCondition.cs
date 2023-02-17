@@ -79,10 +79,10 @@ namespace MogshipUploader.Util
 
         public unsafe ShipCondition(InventoryContainer* inventory, int id)
         {
-            this.HullDurability = ((InventoryItem*)inventory->GetInventorySlot(0 + (id * 5)))->Condition;
-            this.SternDurability = ((InventoryItem*)inventory->GetInventorySlot(1 + (id * 5)))->Condition;
-            this.BowDurability = ((InventoryItem*)inventory->GetInventorySlot(2 + (id * 5)))->Condition;
-            this.BridgeDurability = ((InventoryItem*)inventory->GetInventorySlot(3 + (id * 5)))->Condition;
+            this.HullDurability = (inventory->GetInventorySlot(0 + (id * 5)))->Condition;
+            this.SternDurability = (inventory->GetInventorySlot(1 + (id * 5)))->Condition;
+            this.BowDurability = (inventory->GetInventorySlot(2 + (id * 5)))->Condition;
+            this.BridgeDurability = (inventory->GetInventorySlot(3 + (id * 5)))->Condition;
         }
 
         public static bool operator ==(ShipCondition ship1, ShipCondition ship2)

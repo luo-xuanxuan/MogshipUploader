@@ -10,12 +10,17 @@ public class ConfigWindow : Window, IDisposable
     private Configuration Configuration;
 
     public ConfigWindow(Plugin plugin) : base(
-        "A Wonderful Configuration Window",
-        ImGuiWindowFlags.NoResize | ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
+        "Mogship Uploader Config", ImGuiWindowFlags.NoCollapse | ImGuiWindowFlags.NoScrollbar |
         ImGuiWindowFlags.NoScrollWithMouse)
     {
-        this.Size = new Vector2(232, 75);
-        this.SizeCondition = ImGuiCond.Always;
+
+        this.SizeConstraints = new WindowSizeConstraints
+        {
+            MinimumSize = new Vector2(375, 100),
+            MaximumSize = new Vector2(float.MaxValue, float.MaxValue)
+        };
+        this.Size = new Vector2(375, 100);
+        //this.SizeCondition = ImGuiCond.Always;
 
         this.Configuration = plugin.Configuration;
     }
@@ -24,12 +29,13 @@ public class ConfigWindow : Window, IDisposable
 
     public override void Draw()
     {
-        // can't ref a property, so use a local copy
-        var configValue = this.Configuration.SomePropertyToBeSavedAndWithADefault;
-        if (ImGui.Checkbox("Random Config Bool", ref configValue))
+
+        ImGui.Text("HTTP Endpoint:");
+        var target = this.Configuration.DataTarget;
+        ImGui.InputText(string.Empty, ref Configuration.DataTarget,200);
+        if (ImGui.IsItemDeactivatedAfterEdit())
         {
-            this.Configuration.SomePropertyToBeSavedAndWithADefault = configValue;
-            // can save immediately on change, if you don't want to provide a "Save and Close" button
+            this.Configuration.DataTarget = target;
             this.Configuration.Save();
         }
     }

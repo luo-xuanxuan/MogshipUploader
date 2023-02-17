@@ -28,7 +28,7 @@ namespace MogshipUploader.Util
     public class VoyageLogData
     {
         public int SubmarineId;
-        public int ReturnTime;
+        public uint ReturnTime;
         public List<VoyageSectorData> Log;
 
         public unsafe VoyageLogData(SubmersibleData submersibleData)

@@ -30,7 +30,7 @@ namespace MogshipUploader.Util
         public int SternDurability;
         public int BowDurability;
         public int BridgeDurability;
-        public int ReturnTime;
+        public uint ReturnTime;
         public List<int> Voyage;
 
         public SubmarineData()
