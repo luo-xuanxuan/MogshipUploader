@@ -1,4 +1,4 @@
-{
+[{
     "Author": "Luo Xuanxuan",
     "Name": "Mogship Uploader",
     "Punchline": "Uploads Voyage Log Data to Mogship.",
@@ -20,4 +20,4 @@
     "DownloadLinkTesting": "https://github.com/luo-xuanxuan/MogshipUploader/releases/download/0.1-Alpha/0.1-alpha.zip",
     "DownloadLinkUpdate": "https://github.com/luo-xuanxuan/MogshipUploader/releases/download/0.1-Alpha/0.1-alpha.zip",
 	"IconUrl": "https://github.com/luo-xuanxuan/MogshipUploader/raw/master/MogshipUploader/icon.png"
-}
+}]
