@@ -22,10 +22,8 @@ namespace MogshipUploader
 
     public sealed class Plugin : IDalamudPlugin
     {
-        public uint[] ReturnTime = new uint[4] { 0, 0, 0, 0 };
         public ushort[] StatusWatch = new ushort[4] { 0, 0, 0, 0 };
         public SubmarineData[] Submarines = new SubmarineData[4];
-        public ShipCondition[] ShipConditions = new ShipCondition[4];
 
         public string debug = "";
 
@@ -79,10 +77,6 @@ namespace MogshipUploader
             Submarines[1] = new SubmarineData();
             Submarines[2] = new SubmarineData();
             Submarines[3] = new SubmarineData();
-            ShipConditions[0] = new ShipCondition();
-            ShipConditions[1] = new ShipCondition();
-            ShipConditions[2] = new ShipCondition();
-            ShipConditions[3] = new ShipCondition();
 
         }
 
@@ -114,36 +108,25 @@ namespace MogshipUploader
             //PluginLog.Log(json);
             var client = new HttpClient();
             var url = "https://db.mogship.com/";
+            var url2 = "http://127.0.0.1:8000";
             var cts = new CancellationTokenSource();
             cts.CancelAfter(60000); //60s
 
+            File.WriteAllText("C:\\Users\\shade\\Documents\\Python\\MogshipDB\\test.json", json);
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
+            
 
-            client.PostAsync(url, content, cts.Token);
+            client.PostAsync(url2, content, cts.Token);
         }
 
         public unsafe void OnFrameworkUpdate(Framework framework)
         {
 
-            //damage data can be flawed if player swaps parts and sends on voyage and doesnt leave the room until finalizing
-
-            //debug = "";
-
-            //PluginLog.Log(this.MemoryPointer:X8);
             //PluginLog.Log($"Housing Manager: {(nint)HousingManager.Instance():X}");
 
             var workshopTerritory = (HousingWorkshopTerritory*)HousingManager.Instance()->WorkshopTerritory;
-            if (workshopTerritory == null)
-            {
-                //fixes character swapping holding previous ship conditions
-                for (int i = 0; i < 4; i++)
-                {
-                    ShipConditions[i] = new ShipCondition();
-                    ReturnTime[i] = 0;
-                }
-                return;
-            }
+            if (workshopTerritory == null) return;
 
             var inventoryManager = InventoryManager.Instance();
             var subContainer = inventoryManager->GetInventoryContainer(InventoryType.HousingInteriorPlacedItems2);
@@ -151,31 +134,28 @@ namespace MogshipUploader
 
             for (int i = 0; i < 4; i++)
             {
-                if (workshopTerritory->SubmersibleList[i].ReturnTime == 0 && ReturnTime[i] != 0)
+                if (StatusWatch[i] != 2 && workshopTerritory->SubmersibleList[i].Status == 2)
                 {
-                    if (ReturnTime[i] <= DateTimeOffset.UtcNow.ToUnixTimeSeconds())
-                    {
-                        VoyageDataPacket data = new VoyageDataPacket(workshopTerritory->SubmersibleList[i]);
-                        data.VoyageLog.ReturnTime = ReturnTime[i];
-
-                        ShipCondition newCondition = new ShipCondition(subContainer, i);
-                        DamageData damage = new DamageData(workshopTerritory->SubmersibleList[i], ShipConditions[i], newCondition);
-
-                        sendData(new DamageDataPacket(damage).getJSON());
-
-                        sendData(data.getJSON());
-
-                        ShipConditions[i] = newCondition;
-                    }
+                    Submarines[i] = new SubmarineData(workshopTerritory->SubmersibleList[i], subContainer, i);
+                    continue;
                 }
 
-                if(StatusWatch[i] != 2 && workshopTerritory->SubmersibleList[i].Status == 2)
-                    ShipConditions[i] = new ShipCondition(subContainer, i);
+                if (StatusWatch[i] != 2) continue;
+                if (workshopTerritory->SubmersibleList[i].Status != 1) continue;
+                if (Submarines[i].ReturnTime > DateTimeOffset.UtcNow.ToUnixTimeSeconds()) continue;
+                
+                VoyageDataPacket data = new VoyageDataPacket(workshopTerritory->SubmersibleList[i]);
+                data.VoyageLog.UpdateSubmarine(Submarines[i]);
+                sendData(data.getJSON());
 
-                StatusWatch[i] = workshopTerritory->SubmersibleList[i].Status;
-
-                ReturnTime[i] = workshopTerritory->SubmersibleList[i].ReturnTime;
+                DamageData damage = new DamageData(workshopTerritory->SubmersibleList[i], Submarines[i].Condition, new ShipCondition(subContainer, i));
+                sendData(new DamageDataPacket(damage).getJSON());
             }
+
+            StatusWatch[0] = workshopTerritory->SubmersibleList[0].Status;
+            StatusWatch[1] = workshopTerritory->SubmersibleList[1].Status;
+            StatusWatch[2] = workshopTerritory->SubmersibleList[2].Status;
+            StatusWatch[3] = workshopTerritory->SubmersibleList[3].Status;
         }
     }
 }

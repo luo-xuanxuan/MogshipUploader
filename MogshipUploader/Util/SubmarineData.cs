@@ -1,4 +1,5 @@
 using FFXIVClientStructs.FFXIV.Client.Game;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Text;
 
@@ -6,7 +7,9 @@ namespace MogshipUploader.Util
 {
     public class SubmarineDataPacket
     {
+        [JsonProperty]
         public UserData User;
+        [JsonProperty]
         public SubmarineData Submarine;
         public unsafe SubmarineDataPacket(SubmarineData sub, UserData user)
         {
@@ -18,19 +21,37 @@ namespace MogshipUploader.Util
 
     public class SubmarineData
     {
+        [JsonProperty]
         public string SubmarineName;
+        [JsonProperty]
         public int SubmarineId;
+        [JsonProperty]
         public int Rank;
+        [JsonProperty]
         public int Experience;
+        [JsonProperty]
         public int HullId;
+        [JsonProperty]
         public int SternId;
+        [JsonProperty]
         public int BowId;
+        [JsonProperty]
         public int BridgeId;
-        public int HullDurability;
-        public int SternDurability;
-        public int BowDurability;
-        public int BridgeDurability;
+        [JsonProperty]
+        public ShipCondition Condition;
+        [JsonIgnore]
+        public int Surveillance;
+        [JsonIgnore]
+        public int Retrieval;
+        [JsonIgnore]
+        public int Favor;
+        [JsonIgnore]
+        public int Range;
+        [JsonIgnore]
+        public int Speed;
+        [JsonProperty]
         public uint ReturnTime;
+        [JsonProperty]
         public List<int> Voyage;
 
         public SubmarineData()
@@ -43,11 +64,13 @@ namespace MogshipUploader.Util
             this.SternId = 0;
             this.BowId = 0;
             this.BridgeId = 0;
-            this.HullDurability = 0;
-            this.SternDurability = 0;
-            this.BowDurability = 0;
-            this.BridgeDurability = 0;
             this.ReturnTime = 0;
+            this.Surveillance = 0;
+            this.Retrieval = 0;
+            this.Favor = 0;
+            this.Range = 0;
+            this.Speed = 0;
+            this.Condition = new ShipCondition();
             this.Voyage = new List<int>();
         }
 
@@ -62,22 +85,22 @@ namespace MogshipUploader.Util
             this.SternId = submersibleData.SternId;
             this.BowId = submersibleData.BowId;
             this.BridgeId = submersibleData.BridgeId;
-            this.HullDurability = ((InventoryItem*)inventory->GetInventorySlot(0 + (id * 5)))->Condition;
-            this.SternDurability = ((InventoryItem*)inventory->GetInventorySlot(1 + (id * 5)))->Condition;
-            this.BowDurability = ((InventoryItem*)inventory->GetInventorySlot(2 + (id * 5)))->Condition;
-            this.BridgeDurability = ((InventoryItem*)inventory->GetInventorySlot(3 + (id * 5)))->Condition;
+            this.Condition = new ShipCondition(inventory,id);
             this.ReturnTime = submersibleData.ReturnTime;
+            this.Surveillance = submersibleData.SurveillanceBase + submersibleData.SurveillanceBonus;
+            this.Retrieval = submersibleData.RetrievalBase + submersibleData.RetrievalBonus;
+            this.Favor = submersibleData.FavorBase + submersibleData.FavorBonus;
+            this.Range = submersibleData.RangeBase + submersibleData.RangeBonus;
+            this.Speed = submersibleData.SpeedBase + submersibleData.SpeedBonus;
             this.Voyage = new List<int>();
             for (int i = 0; i < 5; i++)
             {
                 if (submersibleData.Route[i] != 0)
                 {
                     this.Voyage.Add(submersibleData.Route[i]);
+                    continue;
                 }
-                else
-                {
-                    break;
-                }
+                break;
             }
         }
 
@@ -91,10 +114,10 @@ namespace MogshipUploader.Util
             if (sub1.SternId != sub2.SternId) return false;
             if (sub1.BowId != sub2.BowId) return false;
             if (sub1.BridgeId != sub2.BridgeId) return false;
-            if (sub1.HullDurability != sub2.HullDurability) return false;
-            if (sub1.SternDurability != sub2.SternDurability) return false;
-            if (sub1.BowDurability != sub2.BowDurability) return false;
-            if (sub1.BridgeDurability != sub2.BridgeDurability) return false;
+            if (sub1.Condition.HullCondition != sub2.Condition.HullCondition) return false;
+            if (sub1.Condition.SternCondition != sub2.Condition.SternCondition) return false;
+            if (sub1.Condition.BowCondition != sub2.Condition.BowCondition) return false;
+            if (sub1.Condition.BridgeCondition != sub2.Condition.BridgeCondition) return false;
             if (sub1.ReturnTime != sub2.ReturnTime) return false;
             if (sub1.Voyage.Count != sub2.Voyage.Count) return false;
             for (int i = 0; i < sub1.Voyage.Count; i++)
@@ -112,10 +135,10 @@ namespace MogshipUploader.Util
             if (sub1.SternId != sub2.SternId) return true;
             if (sub1.BowId != sub2.BowId) return true;
             if (sub1.BridgeId != sub2.BridgeId) return true;
-            if (sub1.HullDurability != sub2.HullDurability) return true;
-            if (sub1.SternDurability != sub2.SternDurability) return true;
-            if (sub1.BowDurability != sub2.BowDurability) return true;
-            if (sub1.BridgeDurability != sub2.BridgeDurability) return true;
+            if (sub1.Condition.HullCondition != sub2.Condition.HullCondition) return true;
+            if (sub1.Condition.SternCondition != sub2.Condition.SternCondition) return true;
+            if (sub1.Condition.BowCondition != sub2.Condition.BowCondition) return true;
+            if (sub1.Condition.BridgeCondition != sub2.Condition.BridgeCondition) return true;
             if (sub1.ReturnTime != sub2.ReturnTime) return true;
             if (sub1.Voyage.Count != sub2.Voyage.Count) return true;
             for (int i = 0; i < sub1.Voyage.Count; i++)

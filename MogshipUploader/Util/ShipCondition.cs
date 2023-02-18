@@ -7,10 +7,12 @@ namespace MogshipUploader.Util
     {
         [JsonProperty]
         DamageData Damage;
-
+        [JsonProperty]
+        UploaderVersionPacket UploaderVersion;
         public DamageDataPacket(DamageData Damage)
         {
             this.Damage = Damage;
+            this.UploaderVersion = new UploaderVersionPacket();
         }
 
         public string getJSON()
@@ -61,45 +63,45 @@ namespace MogshipUploader.Util
     public class ShipCondition
     {
         [JsonProperty]
-        public int HullDurability;
+        public int HullCondition;
         [JsonProperty]
-        public int SternDurability;
+        public int SternCondition;
         [JsonProperty]
-        public int BowDurability;
+        public int BowCondition;
         [JsonProperty]
-        public int BridgeDurability;
+        public int BridgeCondition;
 
         public ShipCondition()
         {
-            HullDurability = 0;
-            SternDurability = 0;
-            BowDurability = 0;
-            BridgeDurability = 0;
+            HullCondition = 0;
+            SternCondition = 0;
+            BowCondition = 0;
+            BridgeCondition = 0;
         }
 
         public unsafe ShipCondition(InventoryContainer* inventory, int id)
         {
-            this.HullDurability = (inventory->GetInventorySlot(0 + (id * 5)))->Condition;
-            this.SternDurability = (inventory->GetInventorySlot(1 + (id * 5)))->Condition;
-            this.BowDurability = (inventory->GetInventorySlot(2 + (id * 5)))->Condition;
-            this.BridgeDurability = (inventory->GetInventorySlot(3 + (id * 5)))->Condition;
+            this.HullCondition = (inventory->GetInventorySlot(0 + (id * 5)))->Condition;
+            this.SternCondition = (inventory->GetInventorySlot(1 + (id * 5)))->Condition;
+            this.BowCondition = (inventory->GetInventorySlot(2 + (id * 5)))->Condition;
+            this.BridgeCondition = (inventory->GetInventorySlot(3 + (id * 5)))->Condition;
         }
 
         public static bool operator ==(ShipCondition ship1, ShipCondition ship2)
         {
-            if (ship1.HullDurability != ship2.HullDurability) return false;
-            if (ship1.SternDurability != ship2.SternDurability) return false;
-            if (ship1.BowDurability != ship2.BowDurability) return false;
-            if (ship1.BridgeDurability != ship2.BridgeDurability) return false;
+            if (ship1.HullCondition != ship2.HullCondition) return false;
+            if (ship1.SternCondition != ship2.SternCondition) return false;
+            if (ship1.BowCondition != ship2.BowCondition) return false;
+            if (ship1.BridgeCondition != ship2.BridgeCondition) return false;
             return true;
         }
 
         public static bool operator !=(ShipCondition ship1, ShipCondition ship2)
         {
-            if (ship1.HullDurability != ship2.HullDurability) return true;
-            if (ship1.SternDurability != ship2.SternDurability) return true;
-            if (ship1.BowDurability != ship2.BowDurability) return true;
-            if (ship1.BridgeDurability != ship2.BridgeDurability) return true;
+            if (ship1.HullCondition != ship2.HullCondition) return true;
+            if (ship1.SternCondition != ship2.SternCondition) return true;
+            if (ship1.BowCondition != ship2.BowCondition) return true;
+            if (ship1.BridgeCondition != ship2.BridgeCondition) return true;
             return false;
         }
 

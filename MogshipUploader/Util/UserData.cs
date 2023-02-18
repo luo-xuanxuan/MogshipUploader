@@ -1,4 +1,6 @@
 
+using System.Dynamic;
+
 namespace MogshipUploader.Util
 {
     public class UserData
@@ -29,6 +31,11 @@ namespace MogshipUploader.Util
         private string GetLocalPlayerWorld()
         {
             return plugin.ClientState.LocalPlayer?.HomeWorld.GameData?.Name.ToString() ?? string.Empty;
+        }
+
+        public string getJSONString()
+        {
+            return "";
         }
     }
 }

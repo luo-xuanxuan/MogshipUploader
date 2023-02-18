@@ -52,6 +52,31 @@ namespace MogshipUploader.Util
         [FieldOffset(0x3A)] public fixed byte Route[5];
 
         [FieldOffset(0x37)] public fixed byte Name[20];
+
+        [FieldOffset(0x50)] public ushort LogRating;
+        [FieldOffset(0x52)] public ushort VoyageSpeed; //? Might update to current speed, weird value
+
+        [FixedSizeArray<AirshipSectorData>(5)]
+        [FieldOffset(0x54)] public fixed byte VoyageSectorData[0x38 * 5];
+    }
+
+    [StructLayout(LayoutKind.Explicit, Size = 0x38)]
+    public unsafe partial struct AirshipSectorData
+    {
+        [FieldOffset(0x0)] public uint Experience;
+        [FieldOffset(0x4)] public uint FavorResult;
+        [FieldOffset(0x8)] public byte SectorId;
+        [FieldOffset(0x9)] public byte DiscoveredSectorId;
+        [FieldOffset(0xA)] public byte ExperienceRating;
+        [FieldOffset(0xB)] public byte UnlockedAirship;
+        [FieldOffset(0xC)] public fixed uint ItemId[2];
+        [FieldOffset(0x14)] public fixed ushort Quantity[2];
+        [FieldOffset(0x18)] public fixed uint SurveillanceResult[2];
+        [FieldOffset(0x20)] public fixed uint RetrievalResult[2];
+        [FieldOffset(0x28)] public fixed uint QualityResult[2];
+
+        [FieldOffset(0x33)] public byte IsDoubleDip;
+        [FieldOffset(0x34)] public fixed byte IsHq[2];
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 0x2320)]
@@ -87,31 +112,30 @@ namespace MogshipUploader.Util
         [FieldOffset(0x5A)] public ushort RangeBonus;
         [FieldOffset(0x5C)] public ushort FavorBonus;
 
-        [FixedSizeArray<SectorData>(5)]
+        [FixedSizeArray<SubmersibleSectorData>(5)]
         [FieldOffset(0x64)] public fixed byte VoyageSectorData[0x38 * 5];
 
-        public Span<SectorData> VoyageSectors => new(Unsafe.AsPointer(ref VoyageSectorData[0]), 5);
+        public Span<SubmersibleSectorData> VoyageSectors => new(Unsafe.AsPointer(ref VoyageSectorData[0]), 5);
     }
 
     [StructLayout(LayoutKind.Explicit, Size = 0x38)]
-    public unsafe partial struct SectorData
+    public unsafe partial struct SubmersibleSectorData
     {
         [FieldOffset(0x0)] public byte SectorId;
-        [FieldOffset(0x1)] public byte ExpRating;
+        [FieldOffset(0x1)] public byte ExperienceRating;
         [FieldOffset(0x2)] public byte DiscoveredSectorId;
-        [FieldOffset(0x3)] public byte FirstTimeExplored;
+        [FieldOffset(0x3)] public byte IsFirstTimeExplored;
         [FieldOffset(0x4)] public byte UnlockedSubmarine;
-        [FieldOffset(0x5)] public byte DoubleDip;
-
+        [FieldOffset(0x5)] public byte IsDoubleDip;
+        //2bytes
         [FieldOffset(0x8)] public uint FavorResult;
-        [FieldOffset(0xC)] public uint Exp;
-
+        [FieldOffset(0xC)] public uint Experience;
         [FieldOffset(0x10)] public fixed uint ItemId[2];
         [FieldOffset(0x18)] public fixed ushort Quantity[2];
         [FieldOffset(0x1C)] public fixed byte isHQ[2];
         [FieldOffset(0x1E)] public fixed byte isNotTier3[2];
         [FieldOffset(0x20)] public fixed uint SurveillanceResult[2];
         [FieldOffset(0x28)] public fixed uint RetrievalResult[2];
-        [FieldOffset(0x30)] public fixed uint ItemQualityMessage[2];
+        [FieldOffset(0x30)] public fixed uint QualityResult[2];
     }
 }

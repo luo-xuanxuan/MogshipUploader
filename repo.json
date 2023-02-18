@@ -6,8 +6,8 @@
     "Description": "Collects data from submersible voyages to a central database for the community to understand more data regarding submersibles.",
     "Tags": [ "Mogship", "Voyages", "Submersibles", "Airships" ],
     "InternalName": "MogshipUploader",
-    "AssemblyVersion": "0.1.0.0",
-    "TestingAssemblyVersion": "0.1.0.0",
+    "AssemblyVersion": "0.2.0.0",
+    "TestingAssemblyVersion": "0.2.0.0",
     "RepoUrl": "https://github.com/luo-xuanxuan/MogshipUploader/",
     "ApplicableVersion": "any",
     "DalamudApiLevel": 8,
@@ -15,8 +15,8 @@
     "IsTestingExclusive": "false",
     "DownloadCount": 1,
     "LastUpdate": 0,
-    "DownloadLinkInstall": "https://github.com/luo-xuanxuan/MogshipUploader/raw/master/0.1-alpha.zip",
-    "DownloadLinkUpdate": "https://github.com/luo-xuanxuan/MogshipUploader/raw/master/0.1-alpha.zip",
+    "DownloadLinkInstall": "https://github.com/luo-xuanxuan/MogshipUploader/raw/master/0.2-alpha.zip",
+    "DownloadLinkUpdate": "https://github.com/luo-xuanxuan/MogshipUploader/raw/master/0.2-alpha.zip",
     "IconUrl": "https://github.com/luo-xuanxuan/MogshipUploader/raw/master/icon.png"
   }
 ]
