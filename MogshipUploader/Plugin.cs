@@ -117,7 +117,7 @@ namespace MogshipUploader
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             
 
-            client.PostAsync(url2, content, cts.Token);
+            client.PostAsync(url, content, cts.Token);
         }
 
         public unsafe void OnFrameworkUpdate(Framework framework)
