@@ -112,7 +112,7 @@ namespace MogshipUploader
             var cts = new CancellationTokenSource();
             cts.CancelAfter(60000); //60s
 
-            File.WriteAllText("C:\\Users\\shade\\Documents\\Python\\MogshipDB\\test.json", json);
+            //File.WriteAllText("C:\\Users\\shade\\Documents\\Python\\MogshipDB\\test.json", json);
 
             var content = new StringContent(json, Encoding.UTF8, "application/json");
             
