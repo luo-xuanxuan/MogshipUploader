@@ -105,18 +105,15 @@ namespace MogshipUploader
 
         public unsafe void sendData(string json)
         {
-            //PluginLog.Log(json);
             var client = new HttpClient();
-            var url = "https://db.mogship.com/";
-            var url2 = "http://127.0.0.1:8000";
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
             var cts = new CancellationTokenSource();
             cts.CancelAfter(60000); //60s
-
-            //File.WriteAllText("C:\\Users\\shade\\Documents\\Python\\MogshipDB\\test.json", json);
-
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-            
-
+#if DEBUG
+            var debug_url = "http://127.0.0.1:8000";
+            client.PostAsync(debug_url, content, cts.Token);
+#endif
+            var url = "https://db.mogship.com/";
             client.PostAsync(url, content, cts.Token);
         }
 
@@ -125,7 +122,7 @@ namespace MogshipUploader
 
             //PluginLog.Log($"Housing Manager: {(nint)HousingManager.Instance():X}");
 
-            var workshopTerritory = (HousingWorkshopTerritory*)HousingManager.Instance()->WorkshopTerritory;
+            var workshopTerritory = (Util.HousingWorkshopTerritory*)HousingManager.Instance()->WorkshopTerritory;
             if (workshopTerritory == null) return;
 
             var inventoryManager = InventoryManager.Instance();
