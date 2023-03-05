@@ -9,7 +9,7 @@ namespace MogshipUploader.Util
 
         public UploaderVersionPacket()
         {
-            Version = "0.2-alpha";
+            Version = "0.3.2-alpha";
         }
 
         public string getJSONString()
